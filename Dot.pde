@@ -6,7 +6,7 @@ class Dot{
   boolean reachedGoal;
   boolean isBest;
   float fitness = 0;
-  int lifespan = 400;
+  int lifespan = 600;
   
   Brain brain;
   
@@ -23,9 +23,11 @@ class Dot{
   void show() {
     if(isBest) {
       fill(0,255,0);
-      ellipse(position.x,position.y,50,50);
+      ellipse(position.x,position.y,14,14);
     } else {
       fill(0);
+      noFill();
+      noStroke();
       ellipse(position.x,position.y,4,4);
     }
   }
@@ -37,10 +39,10 @@ class Dot{
     position.add(velocity);
   }
   
-  void update() {
+  void update(Terrain terrain) {
     if (!dead && !reachedGoal) {
       move();
-      if (outsitePlayground(position) || brain.step >= lifespan) {
+      if (outsitePlayground(position) || brain.step >= lifespan || terrain.isBlocking(position)) {
         dead = true;
       } else if (distanceToGoal(position) < 4) {
         reachedGoal = true;
@@ -51,8 +53,9 @@ class Dot{
   void calculateFitness() {
     if (reachedGoal) {
       fitness = 1.0/16.0 + 10000.0/(float)sq(brain.step);
+    } else {
+      fitness = 1.0/sq(distanceToGoal(position));
     }
-    fitness = 1.0/sq(distanceToGoal(position));
   }
   
   Dot getChild() {

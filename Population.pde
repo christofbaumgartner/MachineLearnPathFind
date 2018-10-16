@@ -1,7 +1,7 @@
 class Population{
   Dot[] dots;
   int gen = 1;
-  int leastStepsNeeded = 400;
+  int leastStepsNeeded = 600;
   
   Population(int size) {
     dots = new Dot[size];
@@ -16,12 +16,12 @@ class Population{
     }
   }
   
-  void update() {
+  void update(Terrain terrain) {
     for (int i = 0; i < dots.length; i++) {
       if (dots[i].brain.step > leastStepsNeeded) {
         dots[i].dead = true;
       } else {
-        dots[i].update();
+        dots[i].update(terrain);
       }
     }
   }
